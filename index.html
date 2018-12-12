@@ -11775,7 +11775,10 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="NBA-Players-of-the-Week">NBA Players of the Week<a class="anchor-link" href="#NBA-Players-of-the-Week">&#182;</a></h1><h2 id="Kevin-Chen">Kevin Chen<a class="anchor-link" href="#Kevin-Chen">&#182;</a></h2><h2 id="1.-Introduction">1. Introduction<a class="anchor-link" href="#1.-Introduction">&#182;</a></h2>
+<h1 id="NBA-Players-of-the-Week">NBA Players of the Week<a class="anchor-link" href="#NBA-Players-of-the-Week">&#182;</a></h1><h2 id="An-analysis-by-Kevin-Chen">An analysis by Kevin Chen<a class="anchor-link" href="#An-analysis-by-Kevin-Chen">&#182;</a></h2><h2 id="1.-Introduction">1. Introduction<a class="anchor-link" href="#1.-Introduction">&#182;</a></h2><p>The NBA Player of the Week award was created in the 1979-80 season and Julius Erving was its first recipient. The award is reserved to the best performers of the best teams of each regular season week, Monday to Sunday. Initially, only one player in the entire league was awarded each week, but since 2001-02 season, at least two players are selected, one from the Eastern Conference and another from the Western Conference. In rare ocasions, the award has been shared by two players.</p>
+<p>Because the Player of the Week award is awarded so frequently, it can be used as a sample of all high performing NBA players.</p>
+<p>Here, I will be reading in a dataset of NBA Players of the Week and their attributes such as height, weight, age, and position. I will then perform analysis on the data and extrapolate information accordingly.</p>
+
 </div>
 </div>
 </div>
@@ -12905,11 +12908,16 @@ Link to file: <a href="https://www.kaggle.com/jacobbaruch/nba-player-of-the-week
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="2A.-Data-Tidying">2A. Data Tidying<a class="anchor-link" href="#2A.-Data-Tidying">&#182;</a></h3><p>I'm getting rid of irrelevant information such as active season.</p>
+<h3 id="2A.-Data-Tidying">2A. Data Tidying<a class="anchor-link" href="#2A.-Data-Tidying">&#182;</a></h3><p>Here, I'm getting rid of irrelevant information such as active season.</p>
 <p>There are some inconsistencies regarding position (GF is the same as G-F, etc.) so I'm also normalizing the positions.</p>
-<p>There are also inconsistencies regarding teams that have been renamed (SuperSonics -&gt; Thunder, Bullets -&gt; Wizards), so I'm updating those values.</p>
-<p>However, Charlotte and New Orleans follow special rules. In 2002, the Charlotte Hornets moved to New Orleans and Charlotte ceased to have an NBA team. But in 2004, the Charlotte Bobcats were created. In 2013, the New Orleans Hornets changed their name to the New Orleans Pelicans. In 2014, the Charlotte Bobcats were renamed back to the Charlotte Hornets. Kinda confusing, but I'll account for this by standardizing to their current names (Charlotte Hornets and New Orleans Pelicans).</p>
-<p>I'm also changing the date to datetime.</p>
+<p>There are also inconsistencies regarding teams that have been renamed or relocated (Seattle SuperSonics -&gt; Oklahoma City Thunder, Washington Bullets -&gt; Washington Wizards), so I'm updating those values to reflect the current team. For example, I'm treating the SuperSonics as the Thunder and the Bullets as the Wizards.</p>
+<p>However, Charlotte and New Orleans follow special rules.</p>
+<p>In 2002, the Charlotte Hornets moved to New Orleans and Charlotte ceased to have an NBA team.</p>
+<p>But in 2004, the Charlotte Bobcats were created.</p>
+<p>Then, in 2013, the New Orleans Hornets changed their name to the New Orleans Pelicans.</p>
+<p>In 2014, the Charlotte Bobcats were renamed back to the Charlotte Hornets.</p>
+<p>Kinda confusing, but I'll account for this by standardizing all Charlotte and New Orleans teams to their current names (Charlotte Hornets and New Orleans Pelicans).</p>
+<p>I'm also changing the date to the datetime format.</p>
 
 </div>
 </div>
@@ -12986,7 +12994,9 @@ See the caveats in the documentation: http://pandas.pydata.org/pandas-docs/stabl
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="2B.-More-Data-Tidying">2B. More Data Tidying<a class="anchor-link" href="#2B.-More-Data-Tidying">&#182;</a></h3><p>I realized that the height and the weight aren't standardized correctly. Because the height in in Foot-Inches, it's hard to work with, so I have to convert the height into cm. And because I'm converting the height into cm (Metric units), I should convert the weight, which is currently in pounds (lb) into kilograms (kg).</p>
+<h3 id="2B.-More-Data-Tidying">2B. More Data Tidying<a class="anchor-link" href="#2B.-More-Data-Tidying">&#182;</a></h3><p>In the datasset, the height and the weight for each player aren't standardized correctly. Because the height in in Feet-Inches, it's hard to work with, so it makes more sense to convert the height to centimeters.</p>
+<p>Since I'm converting the height into cm (metric units), I should convert the weight into metric units as well.</p>
+<p>The weight, which is currently in pounds, will be converted to kilograms.</p>
 
 </div>
 </div>
@@ -14109,6 +14119,7 @@ See the caveats in the documentation: http://pandas.pydata.org/pandas-docs/stabl
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>As you can see through the bar graph, the Los Angeles Lakers have the highest number of players of the week (with over 70), while the Brooklyn Nets have the lowest number of players of the week (under 10).</p>
+<p>Furthermore, looking at the top five teams on this chart (Los Angeles Lakers, Oklahoma City Thunder, San Antonio Spurs, Cleveland Cavaliers, and Miami Heat), it's easy to see that each of these teams have had generational talent, which is true. More about this later though, when we analyze the top 10 most awarded players.</p>
 
 </div>
 </div>
@@ -14127,9 +14138,9 @@ See the caveats in the documentation: http://pandas.pydata.org/pandas-docs/stabl
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">nba</span><span class="o">.</span><span class="n">Age</span><span class="o">=</span> <span class="n">nba</span><span class="o">.</span><span class="n">Age</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
-<span class="n">draft_years</span><span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">nba</span><span class="p">[</span><span class="s1">&#39;draft_year&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span>
-<span class="n">age_values</span><span class="o">=</span> <span class="p">[]</span>
-
+<span class="n">draft_years</span><span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">nba</span><span class="p">[</span><span class="s1">&#39;draft_year&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span> <span class="c1"># list of draft years</span>
+<span class="n">age_values</span><span class="o">=</span> <span class="p">[]</span> <span class="c1"># list of ages</span>
+<span class="c1"># for each draft year, get avg age</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">draft_years</span><span class="p">:</span>
     <span class="n">x</span><span class="o">=</span> <span class="n">nba</span><span class="p">[</span><span class="n">nba</span><span class="p">[</span><span class="s1">&#39;draft_year&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">i</span><span class="p">]</span>
     <span class="n">avg</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">Age</span><span class="p">)</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="c1"># taking average</span>
@@ -14139,7 +14150,7 @@ See the caveats in the documentation: http://pandas.pydata.org/pandas-docs/stabl
 <span class="n">new_index</span> <span class="o">=</span> <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;age_values&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">values</span> 
 <span class="n">sorted_data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="n">new_index</span><span class="p">)</span>
 
-<span class="c1">#P lotting</span>
+<span class="c1"># Plotting</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
 <span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">sorted_data</span><span class="p">[</span><span class="s1">&#39;draft_years&#39;</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">sorted_data</span><span class="p">[</span><span class="s1">&#39;age_values&#39;</span><span class="p">])</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">rotation</span><span class="o">=</span> <span class="mi">90</span><span class="p">)</span>
@@ -14180,7 +14191,8 @@ See the caveats in the documentation: http://pandas.pydata.org/pandas-docs/stabl
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>As you can see through the bar graph, the average age, which was almost 40 in 1969, has steadily decreased to what is 25 in 2016. This is likely because as the NBA has become more popular, more and more players from college have gotten drafted, decreasing the average age. Also, younger players have more potential and athleticism than older players.</p>
+<p>As you can see through the bar graph, the average age, which was almost 40 in 1969, has steadily decreased to what is 25 in 2016. This is likely because as the NBA has become more popular, more and more players from college have gotten drafted, decreasing the average age.</p>
+<p>Also, younger players have more potential and athleticism than older players. It is estimated that the peak for NBA players is usually around the ages of 25-29. While there are special exceptions, generally, NBA players start to decline around the age of 30. Thus, it makes sense to draft younger players so that they can develop and reach their peak.</p>
 
 </div>
 </div>
@@ -14189,7 +14201,7 @@ See the caveats in the documentation: http://pandas.pydata.org/pandas-docs/stabl
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="3C.-What-is-the-proportion-of-Players-of-the-Week-(in-terms-of-the-positions-that-they-play)?">3C. What is the proportion of Players of the Week (in terms of the positions that they play)?<a class="anchor-link" href="#3C.-What-is-the-proportion-of-Players-of-the-Week-(in-terms-of-the-positions-that-they-play)?">&#182;</a></h3>
+<h3 id="3C.-What-is-the-proportion-of-Players-of-the-Week-for-each-position?">3C. What is the proportion of Players of the Week for each position?<a class="anchor-link" href="#3C.-What-is-the-proportion-of-Players-of-the-Week-for-each-position?">&#182;</a></h3>
 </div>
 </div>
 </div>
@@ -14235,17 +14247,22 @@ See the caveats in the documentation: http://pandas.pydata.org/pandas-docs/stabl
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>First, I'll explain the basketball positions so that it's easier to understand the chart. In basketball, there are 5 positions: Point Guard, Shooting Guard, Power Forward, Small Forward, and Center.</p>
-<p>Here are what the position variables mean: 
-..<em>PG - Point Guard
-..</em>SG - Shooting Guard
-..<em>SF - Small Forward
-..</em>PF - Power Forward
-..<em>C - Center
-..</em>G - Guard (Can play Point Guard and Shooting Guard
-..<em>F - Forward (Can play either Small Forward and Power Forward)
-..</em>GF - Guard-Forward (Can play Shooting Guard and Small Forward)
-..*FC - Forward-Center (Can play Power Forward and Center)</p>
-<p>From the pie chart, the majority of players who won the award of Player of the Week played the versatile Guard position and the Shooting Guard position. In contrast, there weren't many players of the week who played Guard-Forward, Forward-Center, or Small Forward.</p>
+<p>Traditionally, players who filled these position would solely stick to their role and focus on their task, but basketball has advanced a lot since then and every player these days are required to play two or more positions at one time.</p>
+<p>This is due to the nature of the sport where players move around and play flexibly, doing what is required in any given situation.</p>
+<p>Here are what the positions are in the context of the dataset:</p>
+<ul>
+<li>PG - Point Guard</li>
+<li>SG - Shooting Guard</li>
+<li>SF - Small Forward</li>
+<li>PF - Power Forward</li>
+<li>C - Center</li>
+<li>G - Guard (Can play Point Guard and Shooting Guard</li>
+<li>F - Forward (Can play either Small Forward and Power Forward)</li>
+<li>GF - Guard-Forward (Can play Shooting Guard and Small Forward)</li>
+<li>FC - Forward-Center (Can play Power Forward and Center)</li>
+</ul>
+<p>From the pie chart, the majority of players who won the award of Player of the Week play the versatile Guard position (both PG and SG), the Shooting Guard position, and the Center position. In contrast, there weren't many players of the week who play Guard-Forward, Forward-Center, or Small Forward.</p>
+<p>From this data, we can extrapolate that the Player of the Week award is awarded most to players who are able to score a lot of points (Shooting Guards), players who are good at directing the offense and getting assists (Point Guards), and players who are able to use their strength and height to explosively dominate the basket both offensively and defensively (Centers).</p>
 
 </div>
 </div>
@@ -14315,7 +14332,9 @@ See the caveats in the documentation: http://pandas.pydata.org/pandas-docs/stabl
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Here, we can see that the upper echelon of BMI belong to Power Forwards and Centers. This makes sense because those positions typically require the largest amount of body mass. Power forwards typically play in the low post area in basketball, which means that they need to aggressive in boxing people out and getting rebounds. The Center position typically belongs to the biggest men on the court, as they need to play close to the basket to get rebounds and protect the rim.</p>
+<p>Here, we can see that the upper echelon of BMI belong to Power Forwards and Centers. This makes sense because those positions typically require the largest amount of body mass.</p>
+<p>The Center position typically belongs to the biggest men on the court, as they need to play close to the basket to get rebounds and protect the rim. On the offensive play, most centers do not consistently score midrange or beyond the arch. Instead, most of their points should be from offensive rebounds and are also required to block defenders to open other players up for driving to the basket. On the defense, the center is responsible for keeping the opponent from shooting by blocking shots and passes in the vital area. They’re also expected to fight for rebounds as they’re usually taller physically.</p>
+<p>Power Forwards are usually the second tallest in the team and are the closest to the centre in terms of physical attributes and playing style but with more speed. Defensively, they are required to have the strength to guard bigger players close to the basket.</p>
 <p>In contrast, Guards (PG, SG, G, GF) make up the lower echelon of BMI. This also makes sense because Guards typically need to be agile and fast. This is because they need to be able to drive to the basket quickly, get steals on defense, maneuver around defenders to get open, and dictate the offensive flow for the team.</p>
 
 </div>
@@ -14384,7 +14403,16 @@ See the caveats in the documentation: http://pandas.pydata.org/pandas-docs/stabl
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Here, we can see that by an extraordinary amount, LeBron James has won Player of the Week more than 60 times. This is almost double of Kobe Bryant, who is in second place. The next 8 players all, comparatively, have smaller margins between winnings.</p>
+<p>Here, we can see that by an extraordinary margin, LeBron James has won Player of the Week more than 60 times. This is almost double that of Kobe Bryant, who is in second place. The next 8 players all, comparatively, have smaller margins between winnings.</p>
+<p>Here we can also refer back to the bar chart with the number of players who have won the award by team. Remember that the top five teams were the Los Angeles Lakers, Oklahoma City Thunder, San Antonio Spurs, Cleveland Cavaliers, and Miami Heat.</p>
+<p>Each of these top 5 teams have had players in the top 5 of this chart.</p>
+<ul>
+<li>Los Angeles Lakers - Kobe Bryant</li>
+<li>Oklahoma City Thunder - Kevin Durant</li>
+<li>San Antonio Spurs - Tim Duncan</li>
+<li>Cleveland Cavaliers - LeBron James</li>
+<li>Miami Heat - LeBron James</li>
+</ul>
 
 </div>
 </div>
@@ -14393,8 +14421,10 @@ See the caveats in the documentation: http://pandas.pydata.org/pandas-docs/stabl
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="3F.-Let's-visualize-the-impact-of-each-of-the-top-5-players-awarded-Player-of-the-Week">3F. Let's visualize the impact of each of the top 5 players awarded Player of the Week<a class="anchor-link" href="#3F.-Let's-visualize-the-impact-of-each-of-the-top-5-players-awarded-Player-of-the-Week">&#182;</a></h3><p>Here, we are standardizing according to real value. Because the Eastern and Western conferences weren't established until the 2001 NBA season, the Player of the Week for seasons before 2001 only include one player from all NBA teams instead of one player from each conference. Thus, the real value for those players is 1 and the real value for players after the Eastern and Western conferences were established is .5 because they had to share the award with another player on the other conference.</p>
-<p>For example, LeBron James could've won the Player of the Week award for the Eastern Conference and Kevin Durant could've won the Player of the Week in the same week for the Western Conference. However, Derek Smith (who played in 1985) would've been the sole recipient of the Player of the Week award because there were no conferences. Thus, LeBron and Durant's real values would've been .5 each while Smith's was 1.</p>
+<h3 id="3F.-Let's-visualize-the-impact-of-each-of-the-top-5-players-awarded-Player-of-the-Week">3F. Let's visualize the impact of each of the top 5 players awarded Player of the Week<a class="anchor-link" href="#3F.-Let's-visualize-the-impact-of-each-of-the-top-5-players-awarded-Player-of-the-Week">&#182;</a></h3><p>Lets standardize the top 5 players according to their real value. Because the Eastern and Western conferences weren't established until the 2001 NBA season, the Player of the Week for seasons before 2001 only include one player from all NBA teams instead of one player from each conference.</p>
+<p>Thus, the real value for those players is 1 and the real value for players after the Eastern and Western conferences were established is .5, since those players had to share the award with another player on the other conference.</p>
+<p>For example, LeBron James could've won the Player of the Week award for the Eastern Conference and Kevin Durant could've won the Player of the Week for the Western Conference in the same week.</p>
+<p>However, Derek Smith (who played in 1985) would've been the sole recipient of the Player of the Week award because there were no conferences. Thus, LeBron and Durant's real values would be .5 each while Smith's would be 1.</p>
 
 </div>
 </div>
@@ -14404,12 +14434,14 @@ See the caveats in the documentation: http://pandas.pydata.org/pandas-docs/stabl
 <div class="prompt input_prompt">In&nbsp;[296]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df_LBJ</span><span class="o">=</span><span class="n">nba</span><span class="p">[</span><span class="n">nba</span><span class="o">.</span><span class="n">Player</span><span class="o">==</span><span class="s1">&#39;LeBron James&#39;</span><span class="p">]</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Creating dataframes for each of the top 5 playesr</span>
+<span class="n">df_LBJ</span><span class="o">=</span><span class="n">nba</span><span class="p">[</span><span class="n">nba</span><span class="o">.</span><span class="n">Player</span><span class="o">==</span><span class="s1">&#39;LeBron James&#39;</span><span class="p">]</span>
 <span class="n">df_KB</span><span class="o">=</span><span class="n">nba</span><span class="p">[</span><span class="n">nba</span><span class="o">.</span><span class="n">Player</span><span class="o">==</span><span class="s1">&#39;Kobe Bryant&#39;</span><span class="p">]</span>
 <span class="n">df_KD</span><span class="o">=</span><span class="n">nba</span><span class="p">[</span><span class="n">nba</span><span class="o">.</span><span class="n">Player</span><span class="o">==</span><span class="s1">&#39;Kevin Durant&#39;</span><span class="p">]</span>
 <span class="n">df_MJ</span><span class="o">=</span><span class="n">nba</span><span class="p">[</span><span class="n">nba</span><span class="o">.</span><span class="n">Player</span><span class="o">==</span><span class="s1">&#39;Michael Jordan&#39;</span><span class="p">]</span>
 <span class="n">df_TD</span><span class="o">=</span><span class="n">nba</span><span class="p">[</span><span class="n">nba</span><span class="o">.</span><span class="n">Player</span><span class="o">==</span><span class="s2">&quot;Tim Duncan&quot;</span><span class="p">]</span>
 
+<span class="c1"># Grouping by season_short (year the season ended)</span>
 <span class="n">LBJ</span><span class="o">=</span><span class="n">df_LBJ</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s1">&#39;season_short&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
 <span class="n">LBJ</span><span class="p">[</span><span class="s1">&#39;Season&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">LBJ</span><span class="o">.</span><span class="n">index</span>
 <span class="n">LBJ</span><span class="p">[</span><span class="s1">&#39;Name&#39;</span><span class="p">]</span><span class="o">=</span><span class="s1">&#39;LeBron James&#39;</span>
@@ -14430,6 +14462,7 @@ See the caveats in the documentation: http://pandas.pydata.org/pandas-docs/stabl
 <span class="n">TD</span><span class="p">[</span><span class="s1">&#39;Season&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">TD</span><span class="o">.</span><span class="n">index</span>
 <span class="n">TD</span><span class="p">[</span><span class="s1">&#39;Name&#39;</span><span class="p">]</span><span class="o">=</span><span class="s2">&quot;Tim Duncan&quot;</span>
 
+<span class="c1"># Plotting data</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">15</span><span class="p">))</span>
 <span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;Season&#39;</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="s1">&#39;Real_value&#39;</span><span class="p">,</span><span class="n">data</span><span class="o">=</span><span class="n">LBJ</span><span class="p">,</span><span class="n">hue</span><span class="o">=</span><span class="s1">&#39;Name&#39;</span><span class="p">,</span> <span class="n">palette</span><span class="o">=</span><span class="s1">&#39;ch:2.5,.25&#39;</span><span class="p">)</span>
 <span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;Season&#39;</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="s1">&#39;Real_value&#39;</span><span class="p">,</span><span class="n">data</span><span class="o">=</span><span class="n">KB</span><span class="p">,</span><span class="n">hue</span><span class="o">=</span><span class="s1">&#39;Name&#39;</span><span class="p">,</span> <span class="n">palette</span><span class="o">=</span><span class="s1">&#39;Set1&#39;</span><span class="p">)</span>
@@ -14471,7 +14504,35 @@ See the caveats in the documentation: http://pandas.pydata.org/pandas-docs/stabl
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Here, we can see that Michael Jordan had the greatest impact, with a real value of 4.0 in 1990. However, LeBron had outstanding seasons from 2008-2010, rivalling Jordan with a real value of 3.5. This makes sense, as Michael Jordan and LeBron James are in fierce competition for the title of the greatest basketball player of all time. Tim Duncan was also amazing in 2003-2004, but he dropped of significantly afterwards.</p>
+<h3 id="So-which-player-has-had-the-greatest-impact?">So which player has had the greatest impact?<a class="anchor-link" href="#So-which-player-has-had-the-greatest-impact?">&#182;</a></h3><p>In this plot, we can see that Michael Jordan had the greatest impact, reaching a real value of 4.0 around the late 1980s. This makes a lot of sense historically as well.</p>
+<p>In the 1987-88 NBA season, Jordan let the league in scoring, averaging 35.0 ppg on 53.3% shooting and won his first Most Valuable Player (MVP) award. In the same year, he was also awarded Defensive Player of the Year, with an average of 1.6 blacks and a league high 3.16 steals per game.</p>
+<p>In the 1988-99 NBA season, Jordan again led the league in scoring, averaging 32.5 ppg on 53.8% shooting. During the post-season, Jordan's Bulls reached the Eastern Conference Finals. During the playoffs, Jordan also had a career highlight: "The Shot." This was when he hit a buzzer beater in the final game of the Chicago-Cleveland series and is considered to be one of Jordan's greatest clutch moments. Even in the historical context of the NBA, this shot is considered a classic.</p>
+<p>In the 1989-90 season, Jordan, for the third season in a row, led the league in scoring, averaging 33.6 ppg on 52.6% shooting to lead the Chicago Bulls to yet another Eastern Conference Finals.</p>
+<p>However, LeBron had outstanding seasons from 2008-2010, rivaling Jordan with a real value of 3.5. Again, this also makes sense in context.</p>
+<p>During the 2008-09 NBA season, James finished second in NBA Defensive Player of the Year voting and made his first NBA All-Defensive Team, posting 23 chase-down blocks and a career-high 93 total blocks. He also became only the fourth postmerger player to lead his team in points, rebounds, assists, steals, and blocks in a single season. James also led the Cleveland Cavaliers to a franchise record of 66-16. James also won MVP, becoming the first Cavalier in history to do so.</p>
+<p>In the 2009-10 NBA season, James led his team to the best record in the league for the second consecutive season, averaging 29.7 points, 7.3 rebounds, and 8.6 assists on 50% shooting. James also won MVP for the second consecutive season.</p>
+<p>It is fitting that both Michael Jordan and LeBron James are so close in this graph, as they are, among basketball fans, in fierce competition over the title of Greatest of All Time. However, at least according to the Player of the Week awards, Jordan seems to have the biggest impact, at least in a single year. Again, this is only according the adjusted real values of the number of Player of the Week awards.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Additional-Resources">Additional Resources<a class="anchor-link" href="#Additional-Resources">&#182;</a></h2><p>Hoped you enjoyed the analysis and learned more about basketball! Here are the links to some of the resources that I used and other links that may be beneficial for you to gain more information about the topic and basketball as a whole:</p>
+<ul>
+<li><p>Study of NBA players and when they decline: <a href="http://harvardsportsanalysis.org/2017/11/what-happens-to-nba-players-when-they-age/">http://harvardsportsanalysis.org/2017/11/what-happens-to-nba-players-when-they-age/</a></p>
+</li>
+<li><p>Overview of basketball positions and roles: <a href="https://www.myactivesg.com/sports/basketball/how-to-play/basketball-rules/basketball-positions-and-roles">https://www.myactivesg.com/sports/basketball/how-to-play/basketball-rules/basketball-positions-and-roles</a></p>
+</li>
+<li><p>Extremely useful website for statistics of NBA players: <a href="https://www.basketball-reference.com/">https://www.basketball-reference.com/</a></p>
+</li>
+<li><p>List of NBA awards: <a href="https://en.wikipedia.org/wiki/List_of_National_Basketball_Association_awards">https://en.wikipedia.org/wiki/List_of_National_Basketball_Association_awards</a></p>
+</li>
+<li><p>Really cool and useful guide to the current (2018-19) NBA season for new fans: <a href="https://www.reddit.com/r/nba/comments/9jzdij/a_new_fans_guide_to_the_nba_20182019_season/">https://www.reddit.com/r/nba/comments/9jzdij/a_new_fans_guide_to_the_nba_20182019_season/</a></p>
+</li>
+</ul>
 
 </div>
 </div>
